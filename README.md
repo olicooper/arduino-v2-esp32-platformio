@@ -34,4 +34,5 @@ src/main.c:14:5: error: 'Serial' undeclared (first use in this function); did yo
     * tool-idf (v1.0.1)
     * toolchain-esp32ulp (v1.22851.191205)
     * toolchain-xtensa-esp32 (v8.4.0+2021r1)
+    * toolchain-xtensa32 (v2.80400.210211)
     * tool-esptoolpy (v1.30100.210531)
