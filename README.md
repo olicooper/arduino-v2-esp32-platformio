@@ -1,11 +1,11 @@
 ### Current status
 
-Simple project builds and runs Arduino v2.0.0 (Serial output confirms ESP-IDF v4.4 is running).
+Tested on a `Lolin 32 Lite`. Runs Arduino v2.0.1 (ESP-IDF v4.4), but WiFi does not connect (see [Log output](#log-output) below).
 
 ### Additional info
 
 1. `C:\Users\<username>\.platformio\packages` includes:
-    * framework-arduinoespressif32 (v2.0.0)
+    * framework-arduinoespressif32 (v2.0.1 - `mem-optimized` branch)
     * framework-espidf (v4.3.0)
     * tool-cmake (v3.16.4)
     * tool-idf (v1.0.1)
@@ -13,3 +13,42 @@ Simple project builds and runs Arduino v2.0.0 (Serial output confirms ESP-IDF v4
     * toolchain-xtensa-esp32 (v8.4.0+2021r1)
     * toolchain-xtensa32 (v2.80400.210211)
     * tool-esptoolpy (v1.30100.210531)
+
+
+### Log output
+
+* Build Log
+    ```log
+    PACKAGES:
+    - framework-arduinoespressif32 0.0.0+sha.77f1ebd
+    - tool-esptoolpy 1.30100.210531 (3.1.0)
+    - toolchain-xtensa-esp32 8.4.0+2021r1
+    Dependency Graph
+    |-- <WiFi> 2.0.1
+    RAM:   [=         ]  11.4% (used 37244 bytes from 327680 bytes)
+    Flash: [=====     ]  50.2% (used 657849 bytes from 1310720 bytes)
+    ```
+
+* Debug Log
+    ```log
+    ========= BOOT INFO =========
+
+    MAC: FF:FF:FF:FF:FF:0C
+    BootPart: offset=0x10000 size=0x140000
+    IDF version: v4.4-dev-3401-gb86fe0c66c
+    Free memory: 251372 bytes
+
+    =============================
+
+    [   168][D][WiFiGeneric.cpp:820] _eventCallback(): Arduino Event: 0 - WIFI_READY
+    WiFi onEvent: 0
+    [   267][V][WiFiGeneric.cpp:272] _arduino_event_cb(): STA Started
+    [   272][D][WiFiGeneric.cpp:820] _eventCallback(): Arduino Event: 2 - STA_START
+    WiFi onEvent: 2
+    [   280][V][WiFiGeneric.cpp:96] set_esp_interface_ip(): Configuring Station static IP: 0.0.0.0, MASK: 0.0.0.0, GW: 0.0.0.0
+    WiFi connecting
+    [ 15414][V][WiFiGeneric.cpp:289] _arduino_event_cb(): STA Disconnected: SSID: BrewNet, BSSID: FF:FF:FF:FF:FF:ea, Reason: 204
+    [ 15414][D][WiFiGeneric.cpp:820] _eventCallback(): Arduino Event: 5 - STA_DISCONNECTED
+    [ 15422][W][WiFiGeneric.cpp:841] _eventCallback(): Reason: 204 - HANDSHAKE_TIMEOUT
+    WiFi onEvent: 5
+    ```
