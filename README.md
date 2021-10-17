@@ -6,7 +6,6 @@ Tested on a `Lolin 32 Lite`. Runs Arduino v2.0.1 (ESP-IDF v4.4), but WiFi does n
 
 1. `C:\Users\<username>\.platformio\packages` includes:
     * framework-arduinoespressif32 (v2.0.1 - `mem-optimized` branch)
-    * framework-espidf (v4.3.0)
     * tool-cmake (v3.16.4)
     * tool-idf (v1.0.1)
     * toolchain-esp32ulp (v1.22851.191205)
