@@ -80,7 +80,7 @@ void setup() {
         Serial.println("WiFi failed to start, WiFi disabled");
     }
     else {
-        // This does NOT connect here! WiFi 'connected' callback will be called later
+        // This only initiates the connect process! The WiFi 'connected' callback will be called later.
         auto reason = esp_wifi_connect();
         if (reason == ESP_OK) {
             Serial.println("WiFi connecting");
@@ -117,8 +117,8 @@ void onWifiDisconnected(wifi_event_sta_disconnected_t info) {
     // permanent failure (passphrase/encryption wrong, wifi broken etc.)
     else {
         enabled = false;
+        // This also switches wifi off
         WiFi.disconnect(true, true);
-        WiFi.mode(WIFI_OFF);
     }
 }
 
