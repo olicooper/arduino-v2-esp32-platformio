@@ -6,7 +6,6 @@ Simple project builds and runs Arduino v2.0.0 (Serial output confirms ESP-IDF v4
 
 1. `C:\Users\<username>\.platformio\packages` includes:
     * framework-arduinoespressif32 (v2.0.0)
-    * framework-espidf (v4.3.0)
     * tool-cmake (v3.16.4)
     * tool-idf (v1.0.1)
     * toolchain-esp32ulp (v1.22851.191205)
