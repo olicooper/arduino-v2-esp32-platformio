@@ -65,14 +65,15 @@ void setup() {
     WiFi.mode(WIFI_MODE_STA); //WIFI_OFF|WIFI_MODE_NULL
 
     // Storing the values in 'Storage' class, so disable this
-    WiFi.persistent(false);
+    // WiFi.persistent(false);
     // Fetch details from Storage class...
     auto ssidStr = std::string("MySsid");
     auto passStr = std::string("MyPassword");
 
-    WiFi.setAutoReconnect(false); // default=true
-
-    auto wlStatus = WiFi.begin(ssidStr.c_str(), passStr.c_str(), 0, NULL, false);
+    // WiFi.setAutoReconnect(false); // default=true
+    auto wlStatus = WiFi.begin(ssidStr.c_str(), passStr.c_str());
+    WiFi.printDiag(Serial);
+    // auto wlStatus = WiFi.begin(ssidStr.c_str(), passStr.c_str(), 0, NULL, false);
 
     if (wlStatus == WL_CONNECT_FAILED) {
         enabled = false;
@@ -80,16 +81,17 @@ void setup() {
         Serial.println("WiFi failed to start, WiFi disabled");
     }
     else {
-        // This only initiates the connect process! The WiFi 'connected' callback will be called later.
-        auto reason = esp_wifi_connect();
-        if (reason == ESP_OK) {
-            Serial.println("WiFi connecting");
-        }
-        // likely a credentials issue or AP not in range
-        else {
-            enabled = false;
-            Serial.println("WiFi failed to connect");
-        }
+        Serial.printf("WiFi start %d\n", wlStatus);
+        // // This only initiates the connect process! The WiFi 'connected' callback will be called later.
+        // auto reason = esp_wifi_connect();
+        // if (reason == ESP_OK) {
+        //     Serial.println("WiFi connecting");
+        // }
+        // // likely a credentials issue or AP not in range
+        // else {
+        //     enabled = false;
+        //     Serial.println("WiFi failed to connect");
+        // }
     }
 }
 
@@ -117,8 +119,8 @@ void onWifiDisconnected(wifi_event_sta_disconnected_t info) {
     // permanent failure (passphrase/encryption wrong, wifi broken etc.)
     else {
         enabled = false;
-        // This also switches wifi off
         WiFi.disconnect(true, true);
+        Serial.println("WiFi disabled");
     }
 }
 
