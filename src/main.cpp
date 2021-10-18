@@ -12,9 +12,22 @@ extern "C" {
 #include <Arduino.h>
 #include <WiFi.h>
 
+// #if ESP_IDF_VERSION > ESP_IDF_VERSION_VAL(4,4,0)
+
+#define ARDUINO_200 1
+// #define ARDUINO_106 1
+
+// For Arduino v2.0.0 - v2.0.1
+#if defined(ARDUINO_200)
 void onWifiConnected(wifi_event_sta_connected_t info);
 void onWifiDisconnected(wifi_event_sta_disconnected_t info);
 void onWifiGotIp(ip_event_got_ip_t info);
+#elif defined(ARDUINO_106)
+// For Arduino v1.0.6
+void onWifiConnected(system_event_sta_connected_t info);
+void onWifiDisconnected(system_event_sta_disconnected_t info);
+void onWifiGotIp(system_event_sta_got_ip_t info);
+#endif
 
 bool enabled = true;
 bool wifiConnected = false;
@@ -43,9 +56,10 @@ void setup() {
 
     // WIFI CONFIGURATION
     // =============================
+#if defined(ARDUINO_200)
+    // For Arduino v2.0.0 - v2.0.1
     WiFi.onEvent((WiFiEventFuncCb)[&](arduino_event_id_t event, arduino_event_info_t info) {
         Serial.printf("WiFi onEvent: %d\n", event);
-
         switch (event)
         {
             case ARDUINO_EVENT_WIFI_STA_CONNECTED:
@@ -61,6 +75,26 @@ void setup() {
                 break;
         }
     });
+#elif defined(ARDUINO_106)
+    // For Arduino v1.0.6
+    WiFi.onEvent((WiFiEventFuncCb)[&](system_event_id_t event, system_event_info_t info) {
+        Serial.printf("WiFi onEvent: %d\n", event);
+        switch (event)
+        {
+            case SYSTEM_EVENT_STA_CONNECTED:
+                onWifiConnected(info.connected);
+                break;
+            case SYSTEM_EVENT_STA_DISCONNECTED:
+                onWifiDisconnected(info.disconnected);
+                break;
+            case SYSTEM_EVENT_STA_GOT_IP:
+                onWifiGotIp(info.got_ip);
+                break;
+            default:
+                break;
+        }
+    });
+#endif
 
     WiFi.mode(WIFI_MODE_STA); //WIFI_OFF|WIFI_MODE_NULL
 
@@ -101,12 +135,21 @@ void loop() {
     delay(5000);
 }
 
-
-void onWifiConnected(wifi_event_sta_connected_t info) {
+#if defined(ARDUINO_200)
+void onWifiConnected(wifi_event_sta_connected_t info)
+#elif defined(ARDUINO_106)
+void onWifiConnected(system_event_sta_connected_t info)
+#endif
+{
     Serial.println("onWifiConnected");
 }
 
-void onWifiDisconnected(wifi_event_sta_disconnected_t info) {
+#if defined(ARDUINO_200)
+void onWifiDisconnected(wifi_event_sta_disconnected_t info)
+#elif defined(ARDUINO_106)
+void onWifiDisconnected(system_event_sta_disconnected_t info)
+#endif
+{
     Serial.println("onWifiDisconnected");
     if((info.reason == WIFI_REASON_AUTH_EXPIRE) ||
         (info.reason >= WIFI_REASON_BEACON_TIMEOUT && info.reason != WIFI_REASON_AUTH_FAIL))
@@ -126,7 +169,12 @@ void onWifiDisconnected(wifi_event_sta_disconnected_t info) {
     }
 }
 
-void onWifiGotIp(ip_event_got_ip_t info) {
+#if defined(ARDUINO_200)
+void onWifiGotIp(ip_event_got_ip_t info)
+#elif defined(ARDUINO_106)
+void onWifiGotIp(system_event_sta_got_ip_t info)
+#endif
+{
     Serial.println("onWifiGotIp");
 
     wifiConnected = WiFi.status() == WL_CONNECTED;
