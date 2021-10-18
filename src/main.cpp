@@ -67,10 +67,12 @@ void setup() {
     // Storing the values in 'Storage' class, so disable this
     // WiFi.persistent(false);
     // Fetch details from Storage class...
-    auto ssidStr = std::string("MySsid");
-    auto passStr = std::string("MyPassword");
+    auto ssidStr = std::string("TestNet");
+    // passphrase is WEP compatible: [A-Fa-f0-9]{10}
+    auto passStr = std::string("abcdef1234");
 
     // WiFi.setAutoReconnect(false); // default=true
+    // WiFi.config(IPAddress(192,168,1,8), IPAddress(192,168,1,5), IPAddress(255,255,255,0), IPAddress(192,168,1,1));
     auto wlStatus = WiFi.begin(ssidStr.c_str(), passStr.c_str());
     WiFi.printDiag(Serial);
     // auto wlStatus = WiFi.begin(ssidStr.c_str(), passStr.c_str(), 0, NULL, false);
