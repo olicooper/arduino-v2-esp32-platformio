@@ -1,11 +1,18 @@
-// #include <stdio.h>
-// #include <freertos/FreeRTOS.h>
-// #include <freertos/task.h>
-// #include "sdkconfig.h"
 extern "C" {
 #include "esp_ota_ops.h"
 }
 #include <Arduino.h>
+#include "lora.h"
+
+Lora lora = {};
+
+void processLMICCallback(osjob_t* j) {
+    if (j == nullptr) return;
+
+    if (j == &lora.basicStatePublishJob) {
+        lora.publishBasicState(true);
+    }
+}
 
 void setup() {
     Serial.begin(115200);
@@ -27,8 +34,11 @@ void setup() {
     Serial.printf("IDF version: %s\n", esp_get_idf_version());
     Serial.printf("Free memory: %d bytes\n", esp_get_free_heap_size());
     Serial.println("\n=============================\n");
+
+
+    lora.setup();
 }
 
 void loop() {
-    delay(5000);
+    lora.loop();
 }
