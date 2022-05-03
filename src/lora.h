@@ -7,12 +7,19 @@
 #include <hal/hal.h>
 #include <Arduino_LoRaWAN_network.h>
 
-
-#define LMIC_SS_PIN 18 //SS
-#define LMIC_RST_PIN 14 //RST_LoRa
+#if defined(ARDUINO_LOLIN32_LITE)
+#define LMIC_SS_PIN   5  //SS
+#define LMIC_RST_PIN  4  //RST_LoRa
+#define LMIC_DIO0_PIN 2  //DIO0
+#define LMIC_DIO1_PIN 15 //DIO1
+#define LMIC_DIO2_PIN 13 //DIO2
+#elif defined(ARDUINO_HELTEC_WIRELESS_STICK)
+#define LMIC_SS_PIN   18 //SS
+#define LMIC_RST_PIN  14 //RST_LoRa
 #define LMIC_DIO0_PIN 26 //DIO0
 #define LMIC_DIO1_PIN 35 //DIO1
 #define LMIC_DIO2_PIN 34 //DIO2
+#endif
 #define STATE_PUBLISH_INTERVAL_S 300
 
 static const uint8_t PROGMEM APPEUI[8] = { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 };
